@@ -38,7 +38,7 @@
                 <v-card-text
                   class="pa-0"
                   style="color:#607aad;font-weight:bold;font-size:16px"
-                >{{feed.userId[0].name}}</v-card-text>
+                >{{feed.userId.name}}</v-card-text>
                 <v-layout style="align-items: center;">
                   <p>{{feedDate(feed.postDate)}}</p>
                   <img class="ml-1" src="../assets/world.svg" width="15px" height="15px">
@@ -224,6 +224,7 @@ export default {
       let formedArray = [];
       data.forEach(feed => {
         feed.opencmt = false;
+        feed.userId = feed.userId[0];
         if (
           feed.likedBy.findIndex(each => {
             console.log(each.likeduserId, me.userInfo.userId);
@@ -317,40 +318,38 @@ export default {
     listenCommentUpdate() {
       var me = this;
       this.socket.on("updatecomment", data => {
-        if (me.feeds.length > 0 ) {
+        if (me.feeds.length > 0) {
           let index = me.feeds.findIndex(each => {
-          return each._id == data.postId;
-        });
-        me.feeds[index].comments.unshift(data);
-        me.showcomments = false;
-        me.showcomments = true;
+            return each._id == data.postId;
+          });
+          me.feeds[index].comments.unshift(data);
+          me.showcomments = false;
+          me.showcomments = true;
         }
-        
       });
     },
     listenLikeUpdate() {
       try {
         let me = this;
         this.socket.on("updatelikestatus", data => {
-          if (me.feeds.length>0) {
+          if (me.feeds.length > 0) {
             var index = me.feeds.findIndex(each => {
-            return each._id == data.postId;
-          });
-          if (data.status == "like") {
-            me.feeds[index].likedBy.push({
-              likeduserId: data.userId,
-              name: data.name
+              return each._id == data.postId;
             });
-          } else {
-            var likeIndex = me.feeds[index].likedBy.findIndex(each => {
-              return each.likeduserId == data.userId;
-            });
-            if (likeIndex >= 0) {
-              me.feeds[index].likedBy.splice(likeIndex, 1);
+            if (data.status == "like") {
+              me.feeds[index].likedBy.push({
+                likeduserId: data.userId,
+                name: data.name
+              });
+            } else {
+              var likeIndex = me.feeds[index].likedBy.findIndex(each => {
+                return each.likeduserId == data.userId;
+              });
+              if (likeIndex >= 0) {
+                me.feeds[index].likedBy.splice(likeIndex, 1);
+              }
             }
           }
-          }
-          
         });
       } catch (e) {
         console.log(e);
