@@ -127,7 +127,6 @@ export default {
     this.getPosts();
     this.listenCommentUpdate();
     this.listenLikeUpdate();
-    this.listenDeleteUpdate();
     
   },
   methods: {
@@ -260,12 +259,8 @@ export default {
     },
 
     //listeners
-    listenDeleteUpdate() {
-      var me = this;
-      this.socket.on("afterDelete", data => {
-        me.getposts();
-      });
-    },
+
+
     listenCommentUpdate() {
       var me = this;
       this.socket.on("updatecomment", data => {

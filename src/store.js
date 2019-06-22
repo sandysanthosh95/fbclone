@@ -6,6 +6,8 @@ import io from "socket.io-client";
 
 Vue.use(Vuex)
 
+const URL = "http://localhost:9000/"
+
 export default new Vuex.Store({
   plugins: [
     createPersistedState({
@@ -14,7 +16,8 @@ export default new Vuex.Store({
   ],
   state: {
     user: user,
-    socket: io("http://localhost:9000/myroom"),
+    url: URL,
+    socket: io(URL+ "myroom"),
   },
   mutations: {
     saveUser(state, user) {

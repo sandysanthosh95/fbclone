@@ -157,7 +157,6 @@ export default {
       try {
         let me = this;
         this.socket.on("savedPost", data => {
-          console.log("saved post", data);
           data.data.comments = [];
           if (data.statusCode == 200) {
             me.feeds.unshift(data.data);
